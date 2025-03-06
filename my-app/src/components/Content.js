@@ -1,50 +1,59 @@
+// Content.js
+
 import React, { Component } from "react";
-import savedPosts from "./savedPosts";
+import PostItem from "./PostItem";
 
 class Content extends Component {
-  state = {
-    posts: [],
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      posts: [],
+      name: "",
+    };
+  }
 
   componentDidMount() {
     // Set the initial state of posts to the savedPosts data
-    this.setState({ posts: savedPosts });
+    this.setState({ posts: this.props.savedPosts });
   }
 
   handleSearch = (event) => {
-    const searchTerm = event.target.value.toLowerCase();
-    const filteredPosts = savedPosts.filter((post) =>
-      post.name.toLowerCase().includes(searchTerm)
+    // Capture the user's input value and save it as name
+    this.setState({ name: event.target.value.toLowerCase() });
+
+    // Filter the savedPosts based on the name value
+    const filteredPosts = this.props.savedPosts.filter((post) =>
+      post.name.toLowerCase().includes(this.state.name)
     );
+
+    // Update the state with the filtered posts
     this.setState({ posts: filteredPosts });
   };
 
   render() {
     return (
-      <div className="css.TitleBar">
+      <div className="css-TitleBar">
         <form>
           <label htmlFor="searchInput">Search by Artist Name:</label>
           <input
             type="text"
             id="searchInput"
-            placeholder="Search..."
+            value={this.state.name}
             onChange={this.handleSearch}
           />
-          <span>({this.state.posts.length} results)</span>
+          <p>
+            Showing {this.state.posts.length} of {this.props.savedPosts.length}{" "}
+            posts
+          </p>
         </form>
-        {this.state.posts.map((post) => (
-          <PostItem key={post.id} post={post} />
-        ))}
+        <div className="css-PostContainer">
+          {this.state.posts.map((post) => (
+            <PostItem key={post.id} post={post} />
+          ))}
+        </div>
       </div>
     );
   }
 }
-
-const PostItem = ({ post }) => (
-  <div>
-    <h3>{post.name}</h3>
-    <p>{post.description}</p>
-  </div>
-);
 
 export default Content;
