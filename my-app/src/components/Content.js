@@ -1,30 +1,28 @@
 import React, { Component } from "react";
-
+import PostItem from "./PostItem";
+import savedPosts from "../posts.json";
 import styles from "./Content.module.css";
 
 class Content extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoaded: false, // Loader state
       posts: [], // Stores filtered posts
-      searchTerm: "", // Stores the search input
+      searchTerm: "", // Stores search input
     };
   }
 
   componentDidMount() {
-    // Simulating API fetch delay
-    setTimeout(() => {
-      this.setState({ isLoaded: true, posts: savedPosts });
-    }, 2000);
+    // Set posts state when the component mounts
+    this.setState({ posts: savedPosts });
   }
 
   handleSearch = (event) => {
     const name = event.target.value.toLowerCase(); // Convert input to lowercase
     this.setState({ searchTerm: name });
 
-    const filteredPosts = savedPosts.filter((post) =>
-      post.name.toLowerCase().includes(name)
+    const filteredPosts = savedPosts.filter(
+      (post) => post.name.toLowerCase().includes(name) // Check if name matches search term
     );
 
     this.setState({ posts: filteredPosts });
@@ -49,11 +47,7 @@ class Content extends Component {
         </div>
 
         <div className={styles.searchResults}>
-          {this.state.isLoaded ? (
-            <PostItem posts={this.state.posts} />
-          ) : (
-            <Loader />
-          )}
+          <PostItem posts={this.state.posts} />
         </div>
       </div>
     );
