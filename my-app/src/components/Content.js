@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import PostItem from "./PostItem";
-import Loader from "./Loader";
-import savedPosts from "../posts.json";
+
 import styles from "./Content.module.css";
 
 class Content extends Component {
